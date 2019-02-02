@@ -8,6 +8,7 @@ const manifestData = chrome.runtime.getManifest();
 const exclude_matches = manifestData.content_scripts[0].exclude_matches;
 
 const selectFontElement = document.querySelector('#fonttools-font');
+const selectFontSize = document.querySelector('#fonttools-size');
 
 const twitterStatus = document.querySelector('#twitter');
 const facebookStatus = document.querySelector('#facebook');
@@ -398,7 +399,17 @@ function handleFont() {
   });
 }
 
-browser.storage.local.get(['custom_fonts', 'font'], function (fonts) {
+// Font Size Change
+
+selectFontSize.addEventListener('change', handleSize);
+
+function handleSize() {
+  browser.storage.local.set({
+    fontSize: this.value
+  })
+}
+
+browser.storage.local.get(['custom_fonts', 'font', 'fontSize'], function (fonts) {
   if (fonts.custom_fonts != undefined) {
     var OptGroup = document.createElement('optgroup');
     OptGroup.label = 'فونت های شما';
@@ -417,6 +428,15 @@ browser.storage.local.get(['custom_fonts', 'font'], function (fonts) {
     shouldSort: false,
     noResultsText: 'نتیجه ای یافت نشد',
     itemSelectText: '!بِستَد دل و دین از من',
+    googleEnabled: false
+  });
+  // Font Size Change
+  selectFontSize.value = fonts.fontSize;
+  const choices2 = new Choices('#fonttools-size', {
+    searchEnabled: false,
+    shouldSort: false,
+    noResultsText: 'نتیجه ای یافت نشد',
+    itemSelectText: '!از من دل و دین بستَد',
     googleEnabled: false
   });
 });
@@ -532,6 +552,19 @@ window.addEventListener('load', function () {
   });
 
   selectFontElement.addEventListener('change', function () {
+    var elems = document.querySelectorAll(
+      'choices__list--dropdown .choices__item--choice'
+    );
+    [].forEach.call(elems, function (el) {
+      el.classList.remove('selected-item');
+    });
+    document
+      .querySelector(`.choices__list--dropdown [data-value='${this.value}']`)
+      .classList.add('selected-item');
+  });
+
+  // Font Size Change
+  selectFontSize.addEventListener('change', function () {
     var elems = document.querySelectorAll(
       'choices__list--dropdown .choices__item--choice'
     );

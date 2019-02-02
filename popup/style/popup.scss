@@ -172,6 +172,19 @@ body {
   }
 }
 
+.select-size {
+  position: relative;
+  .choices__inner > .choices__list > .choices__item--selectable {
+    width: 139px;
+    height: 23px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .choices__list--dropdown.is-active {
+    z-index: 999;
+  }
+}
+
 .icons {
   font-size: 0px;
   margin-bottom: 5px;

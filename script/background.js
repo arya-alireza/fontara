@@ -4,18 +4,21 @@ window.browser = (function() {
   return window.msBrowser || window.browser || window.chrome;
 })();
 
-browser.storage.local.get('font', function(data) {
+browser.storage.local.get(['font', 'fontSize'], function(data) {
   if (typeof data.font === 'undefined') {
     browser.storage.local.set({ font: 'Vazir' });
   }
+  if (typeof data.fontSize === 'undefined') {
+    browser.storage.local.set({ font: '12px' });
+  }
 });
 
-browser.runtime.onInstalled.addListener(function() {
-  chrome.tabs.create(
-    { url: 'https://mimalef70.github.io/fontara#changelogs' },
-    function() {}
-  );
-});
+// browser.runtime.onInstalled.addListener(function() {
+//   chrome.tabs.create(
+//     { url: 'https://mimalef70.github.io/fontara#changelogs' },
+//     function() {}
+//   );
+// });
 
 browser.runtime.setUninstallURL(
   'https://docs.google.com/forms/d/e/1FAIpQLSdkUvCG9vfASEits6qeAuH1UdtdAGlLp6I5QfJ4_jbsaKorLQ/viewform'
